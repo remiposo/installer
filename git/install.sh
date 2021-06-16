@@ -23,7 +23,7 @@ if [ -e "$archivedir" ]; then
 fi
 
 apt -y install make autoconf build-essential
-apt -y install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev asciidoc xmlto docbook2x
+apt -y install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
 
 if [ ! -f "$tarball" ]; then
   wget "https://github.com/git/git/archive/refs/tags/${tarball}" -O "$tarball"
@@ -34,5 +34,5 @@ cd "$archivedir"
 
 make configure
 ./configure --prefix="$prefix"
-make all doc
-make install install-doc install-html
+make all
+make install
