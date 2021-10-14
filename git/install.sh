@@ -45,4 +45,9 @@ else
   make install
 fi
 
+# enable bash_completion
+if [ -d /etc/bash_completion.d ]; then
+  cp -f ./contrib/completion/git-completion.bash /etc/bash_completion.d
+fi
+
 exit 0
