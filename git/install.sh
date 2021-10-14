@@ -1,38 +1,48 @@
 #!/bin/bash
+
 #
-# install git
+# git installer
 #
 
 set -eu
-
 script_home="$(cd "$(dirname "$0")" && pwd)"
-cd "$script_home"
-
-version=2.32.0
-tarball="v${version}.tar.gz"
-archivedir="git-${version}"
-prefix="/usr/local"
+cd "${script_home}"
 
 if [ ! -e "/etc/debian_version" ]; then
   echo "Error: This script is only for Debian"
   exit 1
 fi
 
-if [ -e "$archivedir" ]; then
-  rm -rf "$archivedir"
+# build settings
+version='2.33.1'
+tarball="v${version}.tar.gz"
+archivedir="git-${version}"
+prefix="/usr/local"
+
+# initialization
+if [ -e "${archivedir}" ]; then
+  rm -rf "${archivedir}"
 fi
 
-apt -y install make autoconf build-essential
-apt -y install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
+# install build-dep
+apt install -y build-essential
+apt build-dep -y git
 
-if [ ! -f "$tarball" ]; then
-  wget "https://github.com/git/git/archive/refs/tags/${tarball}" -O "$tarball"
+if [ ! -f "${tarball}" ]; then
+  wget "https://github.com/git/git/archive/refs/tags/${tarball}" -O "${tarball}"
 fi
+tar zxvf "${tarball}"
 
-tar zxvf "$tarball"
-cd "$archivedir"
-
+cd "${archivedir}"
 make configure
-./configure --prefix="$prefix"
+./configure --prefix="${prefix}"
 make all
-make install
+
+# use porg if available
+if which porg >/dev/null 2>&1; then
+  porg -lD -E "$(pwd)" 'make install'
+else
+  make install
+fi
+
+exit 0
