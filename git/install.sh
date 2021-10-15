@@ -47,7 +47,7 @@ fi
 
 # enable bash_completion
 if [ -d /etc/bash_completion.d ]; then
-  cp -f ./contrib/completion/git-completion.bash /etc/bash_completion.d
+  cp -f ./contrib/completion/git-completion.bash /etc/bash_completion.d/git_bash_completion
 fi
 
 exit 0
