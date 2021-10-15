@@ -1,8 +1,8 @@
 #!/bin/bash
-#
-# install nodenv
-#
 
+#
+# nodenv installer
+#
 set -eu
 
 git clone https://github.com/nodenv/nodenv.git ~/.nodenv
