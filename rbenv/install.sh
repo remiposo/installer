@@ -1,6 +1,7 @@
 #!/bin/bash
+
 #
-# install rbenv
+# rbenv installer
 #
 
 set -eu
