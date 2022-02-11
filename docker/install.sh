@@ -12,8 +12,8 @@ wget https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/con
 wget https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce-cli_20.10.7~3-0~ubuntu-xenial_amd64.deb
 wget https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_20.10.7~3-0~ubuntu-xenial_amd64.deb
 
-dpkg -i containerd.io_1.4.6-1_amd64.deb docker-ce-cli_20.10.7~3-0~ubuntu-xenial_amd64.deb docker-ce_20.10.7~3-0~ubuntu-xenial_amd64.deb
+sudo dpkg -i containerd.io_1.4.6-1_amd64.deb docker-ce-cli_20.10.7~3-0~ubuntu-xenial_amd64.deb docker-ce_20.10.7~3-0~ubuntu-xenial_amd64.deb
 
-groupadd docker
-usermod -aG docker $USER
+sudo groupadd docker
+sudo usermod -aG docker $USER
 newgrp docker
