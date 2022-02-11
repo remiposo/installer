@@ -1,19 +1,34 @@
-#!/bin/sh
+#!/bin/bash
+
 #
-# install docker
+# docker installer
 #
 
 set -eu
-
 script_home="$(cd "$(dirname "$0")" && pwd)"
-cd "$script_home"
+cd "${script_home}"
 
-wget https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/containerd.io_1.4.6-1_amd64.deb
-wget https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce-cli_20.10.7~3-0~ubuntu-xenial_amd64.deb
-wget https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/docker-ce_20.10.7~3-0~ubuntu-xenial_amd64.deb
+if [ ! -e '/etc/lsb-release' ] && [ ! "$(cat /etc/lsb-release | grep -oP '(?<=DISTRIB_ID=).*')" -eq 'Ubuntu']; then
+  echo 'Error: This script is only for Ubuntu'
+  exit 1
+fi
 
-sudo dpkg -i containerd.io_1.4.6-1_amd64.deb docker-ce-cli_20.10.7~3-0~ubuntu-xenial_amd64.deb docker-ce_20.10.7~3-0~ubuntu-xenial_amd64.deb
+distrib_codename="$(cat /etc/lsb-release | grep -oP '(?<=DISTRIB_CODENAME=).*')"
+docker_version='20.10.9'
+cli_version='20.10.9'
+containerd_version='1.4.9-1'
 
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
+wget "https://download.docker.com/linux/ubuntu/dists/${distrib_codename}/pool/stable/amd64/docker-ce_${docker_version}~3-0~ubuntu-${distrib_codename}_amd64.deb" -O "docker-ce_${docker_version}.deb"
+wget "https://download.docker.com/linux/ubuntu/dists/${distrib_codename}/pool/stable/amd64/docker-ce-cli_${cli_version}~3-0~ubuntu-${distrib_codename}_amd64.deb" -O "docker-ce-cli_${cli_version}.deb"
+wget "https://download.docker.com/linux/ubuntu/dists/${distrib_codename}/pool/stable/amd64/containerd.io_${containerd_version}_amd64.deb" -O "containerd.io_${containerd_version}.deb"
+
+dpkg -i "docker-ce_${docker_version}.deb" "docker-ce-cli_${cli_version}.deb" "containerd.io_${containerd_version}.deb"
+
+echo "Type user_name added to docker group:"
+read USER_NAME
+if [ -z "${USER_NAME}" ];then
+  echo "Error: Please type valid user_name"
+  exit 1
+fi
+groupadd -f docker
+usermod -aG docker ${USER_NAME}
